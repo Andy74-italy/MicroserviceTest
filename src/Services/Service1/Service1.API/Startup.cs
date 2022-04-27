@@ -6,6 +6,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
+using Service1.API.Data;
+using Service1.API.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,6 +33,9 @@ namespace Service1.API
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service1.API", Version = "v1" });
             });
+
+            services.AddScoped<IDBContext, DBContext>();
+            services.AddScoped<IProductRepository, ProductRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
