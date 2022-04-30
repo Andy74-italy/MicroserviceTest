@@ -1,13 +1,14 @@
 ﻿using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
+using Services.Contracts.Data;
 
-namespace Service1.API.Entities
+namespace Service1.Data.Entity
 {
-    public class Product
+    public class Product : IEntity
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; }
+        public object Id { get; set; }
 
         [BsonElement("Name")]
         public string Name { get; set; }

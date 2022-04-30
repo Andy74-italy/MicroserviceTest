@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using MongoDB.Driver;
-using Service1.API.Entities;
+using Services.Contracts.Data;
 
 namespace Service1.API.Data
 {
@@ -9,12 +9,14 @@ namespace Service1.API.Data
         public DBContext(IConfiguration configuration)
         {
             var client = new MongoClient(configuration.GetValue<string>("DatabaseSettings:ConnectionString"));
-            var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
-
-            Products = database.GetCollection<Product>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
-            
+            database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
         }
 
-        public IMongoCollection<Product> Products { get; }
+        public IMongoDatabase database { get; set; }
+
+        public IMongoCollection<T> GetEntity<T>() where T : IEntity
+        { 
+            return database.GetCollection<T>(typeof(T).Name);
+        }
     }
 }
