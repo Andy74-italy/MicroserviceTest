@@ -1,24 +1,25 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Service1.API.Entities;
-using Service1.API.Repositories;
+using Service1.Entities;
+using Service1.Repositories;
+using Services.Contracts.Data;
 using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
-namespace Service1.API.Controllers
+namespace Service1.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
     public class Service1Controller : ControllerBase
     {
-        private readonly IProductRepository _repository;
+        private readonly ProductRepository _repository;
         private readonly ILogger<Service1Controller> _logger;
 
-        public Service1Controller(IProductRepository repository, ILogger<Service1Controller> logger)
+        public Service1Controller(IEntityRepository<Product> repository, ILogger<Service1Controller> logger)
         {
-            _repository = repository ?? throw new ArgumentNullException(nameof(repository));
+            _repository = (ProductRepository)repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
         }
 
@@ -26,7 +27,7 @@ namespace Service1.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
         {
-            var products = await _repository.GetProducts();
+            var products = await _repository.GetEntities();
             return Ok(products);
         }
 
@@ -35,7 +36,7 @@ namespace Service1.API.Controllers
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Product>> GetProductById(string id)
         {
-            var product = await _repository.GetProduct(id);
+            var product = await _repository.GetEntity(id);
             if (product == null)
             {
                 _logger.LogError($"Product with id: {id}, not found.");
@@ -49,7 +50,7 @@ namespace Service1.API.Controllers
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<IEnumerable<Product>>> GetProductByCategory(string category)
         {
-            var products = await _repository.GetProductByCategory(category);
+            var products = await _repository.GetEntityByCategory(category);
             return Ok(products);
         }
 
@@ -57,7 +58,7 @@ namespace Service1.API.Controllers
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
         {
-            await _repository.CreateProduct(product);
+            await _repository.CreateEntity(product);
 
             return CreatedAtRoute("GetProduct", new { id = product.Id }, product);
         }
@@ -66,14 +67,14 @@ namespace Service1.API.Controllers
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> UpdateProduct([FromBody] Product product)
         {
-            return Ok(await _repository.UpdateProduct(product));
+            return Ok(await _repository.UpdateEntity(product));
         }
 
         [HttpDelete("{id:length(24)}", Name = "DeleteProduct")]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
         public async Task<IActionResult> DeleteProductById(string id)
         {
-            return Ok(await _repository.DeleteProduct(id));
+            return Ok(await _repository.DeleteEntity(id));
         }
     }
 }
