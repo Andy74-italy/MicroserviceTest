@@ -48,19 +48,16 @@ namespace Service1.API
 
                     var inttype = typeof(IEntityRepository<>).MakeGenericType(type);
                     var enttype = typeof(EntityRepository<>).MakeGenericType(type);
-                    //services.AddScoped(inttype, enttype);
+                    services.AddScoped(inttype, enttype);
                     var servicecontroltype = typeof(Service1Controller<>).MakeGenericType(type);
-                    var registerclass = TestClassCreation(servicecontroltype, inttype);
+                    var registerclass = TestClassCreation(servicecontroltype, inttype, services);
                     services.AddScoped(servicecontroltype, registerclass);
-
-                    /*
-                     * Some issue here, can't instantiate the class need to create the controller dinamically
-                     */
                 }
             }
+            
         }
 
-        private Type TestClassCreation(Type t, Type arg1) {
+        private Type TestClassCreation(Type t, Type arg1, IServiceCollection services) {
             var moduleName = "ServiceProduct";
             var newTypeName = $"Service1.API.Controllers.{moduleName}";
             var assemblyName = new AssemblyName(newTypeName);
@@ -78,7 +75,9 @@ namespace Service1.API
             ilGenerator.Emit(OpCodes.Nop);
             ilGenerator.Emit(OpCodes.Ret);
 
-            return dynamicType.CreateType();
+            var created = dynamicType.CreateType();
+            services.AddMvc().AddApplicationPart(dynamicAssembly).AddControllersAsServices();
+            return created;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
