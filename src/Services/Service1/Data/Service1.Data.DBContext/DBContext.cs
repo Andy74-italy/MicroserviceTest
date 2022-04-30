@@ -5,10 +5,10 @@ namespace Service1.Data
     public class DBContext<T> : IDBContext<T>
     {
         IMongoDatabase database;
-        public DBContext(string ConnectionString, string DatabaseName)
+        public DBContext(IDBConnectionInfo connectionInfo)
         {
-            var client = new MongoClient(ConnectionString);
-            database = client.GetDatabase(DatabaseName);
+            var client = new MongoClient(connectionInfo.ConnectionString);
+            database = client.GetDatabase(connectionInfo.DatabaseName);
         }
 
         public IMongoCollection<T> GetEntity()

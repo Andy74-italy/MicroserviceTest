@@ -6,8 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using Service1.API.Data;
-using Service1.API.Repositories;
+using Service1.API.Configurations;
+using Service1.Data;
+using Services.Contracts.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,8 +35,25 @@ namespace Service1.API
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "Service1.API", Version = "v1" });
             });
 
-            services.AddScoped<IDBContext, DBContext>();
-            services.AddScoped<IProductRepository, ProductRepository>();
+            services.AddScoped<IDBConnectionInfo, ConnectionInfo>();
+
+            var assembly = System.Reflection.Assembly.LoadFrom(".\\bin\\Controllers\\Service1.Controllers.ProductController.dll");
+
+            var entityType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(typeof(IEntity)));
+            services.AddScoped(typeof(IEntity), entityType);
+
+            services.AddScoped(
+                typeof(IDBContext<>).MakeGenericType(entityType),
+                typeof(DBContext<>).MakeGenericType(entityType));
+
+            var inttype = typeof(IEntityRepository<>).MakeGenericType(entityType);
+            var repositoryType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(inttype));
+            services.AddScoped(inttype, repositoryType);
+
+            //var serviceType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(typeof(ControllerBase)));
+            //services.AddScoped(serviceType);
+
+            services.AddMvc().AddApplicationPart(assembly).AddControllersAsServices();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
