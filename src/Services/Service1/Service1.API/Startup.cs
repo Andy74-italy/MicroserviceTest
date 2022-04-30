@@ -39,7 +39,7 @@ namespace Service1.API
             });
 
             services.AddScoped<IDBContext, DBContext>();
-            var assembly = System.Reflection.Assembly.LoadFrom(".\\bin\\Entities\\Service1.Data.Entity.Products.dll");
+            var assembly = Assembly.LoadFrom(".\\bin\\Entities\\Service1.Data.Entity.Products.dll");
             foreach (Type type in assembly.GetExportedTypes())
             {
                 if (type.IsAssignableTo(typeof(IEntity)))
@@ -54,7 +54,6 @@ namespace Service1.API
                     services.AddScoped(servicecontroltype, registerclass);
                 }
             }
-            
         }
 
         private Type TestClassCreation(Type t, Type arg1, IServiceCollection services) {
