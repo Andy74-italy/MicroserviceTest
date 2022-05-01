@@ -11,6 +11,7 @@ using Service1.Data;
 using Services.Contracts.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -37,23 +38,23 @@ namespace Service1.API
 
             services.AddScoped<IDBConnectionInfo, ConnectionInfo>();
 
-            var assembly = System.Reflection.Assembly.LoadFrom(".\\bin\\Controllers\\Service1.Controllers.ProductController.dll");
+            foreach (string file in Directory.EnumerateFiles(".\\bin\\Controllers\\", "*.dll"))
+            {
+                var assembly = System.Reflection.Assembly.LoadFrom(file);
 
-            var entityType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(typeof(IEntity)));
-            services.AddScoped(typeof(IEntity), entityType);
+                var entityType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(typeof(IEntity)));
+                services.AddScoped(typeof(IEntity), entityType);
 
-            services.AddScoped(
-                typeof(IDBContext<>).MakeGenericType(entityType),
-                typeof(DBContext<>).MakeGenericType(entityType));
+                services.AddScoped(
+                    typeof(IDBContext<>).MakeGenericType(entityType),
+                    typeof(DBContext<>).MakeGenericType(entityType));
 
-            var inttype = typeof(IEntityRepository<>).MakeGenericType(entityType);
-            var repositoryType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(inttype));
-            services.AddScoped(inttype, repositoryType);
+                var inttype = typeof(IEntityRepository<>).MakeGenericType(entityType);
+                var repositoryType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(inttype));
+                services.AddScoped(inttype, repositoryType);
 
-            //var serviceType = assembly.GetExportedTypes().Single(t => t.IsAssignableTo(typeof(ControllerBase)));
-            //services.AddScoped(serviceType);
-
-            services.AddMvc().AddApplicationPart(assembly).AddControllersAsServices();
+                services.AddMvc().AddApplicationPart(assembly).AddControllersAsServices();
+            }
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
