@@ -12,7 +12,7 @@ namespace Service1.API.Data
             var database = client.GetDatabase(configuration.GetValue<string>("DatabaseSettings:DatabaseName"));
 
             Products = database.GetCollection<Product>(configuration.GetValue<string>("DatabaseSettings:CollectionName"));
-            
+
         }
 
         public IMongoCollection<Product> Products { get; }

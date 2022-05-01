@@ -1,7 +1,6 @@
 ﻿using MongoDB.Driver;
 using Service1.API.Data;
 using Service1.API.Entities;
-using Service1.API.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
