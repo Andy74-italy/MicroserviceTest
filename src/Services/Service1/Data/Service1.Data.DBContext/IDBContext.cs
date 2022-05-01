@@ -2,7 +2,8 @@
 
 namespace Service1.Data
 {
-    public interface IDBConnectionInfo {
+    public interface IDBConnectionInfo
+    {
         string ConnectionString { get; }
         string DatabaseName { get; }
     }
