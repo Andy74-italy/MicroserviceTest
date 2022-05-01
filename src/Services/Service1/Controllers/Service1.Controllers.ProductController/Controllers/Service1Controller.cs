@@ -12,7 +12,7 @@ namespace Service1.Controllers
 {
     [ApiController]
     [Route("api/v1/[controller]")]
-    public class Service1Controller : ControllerBase
+    public class Service1Controller : ControllerBase, IGenericController<Product>
     {
         private readonly ProductRepository _repository;
         private readonly ILogger<Service1Controller> _logger;
@@ -25,7 +25,7 @@ namespace Service1.Controllers
 
         [HttpGet]
         [ProducesResponseType(typeof(IEnumerable<Product>), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<IEnumerable<Product>>> GetProducts()
+        public async Task<ActionResult<IEnumerable<Product>>> GetEntities()
         {
             var products = await _repository.GetEntities();
             return Ok(products);
@@ -34,7 +34,7 @@ namespace Service1.Controllers
         [HttpGet("{id:length(24)}", Name = "GetProduct")]
         [ProducesResponseType((int)HttpStatusCode.NotFound)]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Product>> GetProductById(string id)
+        public async Task<ActionResult<Product>> GetEntityById(string id)
         {
             var product = await _repository.GetEntity(id);
             if (product == null)
@@ -56,7 +56,7 @@ namespace Service1.Controllers
 
         [HttpPost]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<ActionResult<Product>> CreateProduct([FromBody] Product product)
+        public async Task<ActionResult<Product>> CreateEntity([FromBody] Product product)
         {
             await _repository.CreateEntity(product);
 
@@ -65,14 +65,14 @@ namespace Service1.Controllers
 
         [HttpPut]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> UpdateProduct([FromBody] Product product)
+        public async Task<IActionResult> UpdateEntity([FromBody] Product product)
         {
             return Ok(await _repository.UpdateEntity(product));
         }
 
         [HttpDelete("{id:length(24)}", Name = "DeleteProduct")]
         [ProducesResponseType(typeof(Product), (int)HttpStatusCode.OK)]
-        public async Task<IActionResult> DeleteProductById(string id)
+        public async Task<IActionResult> DeleteEntityById(string id)
         {
             return Ok(await _repository.DeleteEntity(id));
         }
