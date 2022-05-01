@@ -15,7 +15,7 @@ namespace Service1.API.Data
         public IMongoDatabase database { get; set; }
 
         public IMongoCollection<T> GetEntity<T>() where T : IEntity
-        { 
+        {
             return database.GetCollection<T>(typeof(T).Name);
         }
     }

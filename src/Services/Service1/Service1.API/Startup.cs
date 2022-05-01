@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -11,12 +10,9 @@ using Service1.API.Data;
 using Service1.API.Repositories;
 using Services.Contracts.Data;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Threading.Tasks;
 
 namespace Service1.API
 {
@@ -60,7 +56,8 @@ namespace Service1.API
             }
         }
 
-        private Type TestClassCreation(Type t, Type arg1, IServiceCollection services) {
+        private Type TestClassCreation(Type t, Type arg1, IServiceCollection services)
+        {
             var moduleName = "ServiceProduct";
             var newTypeName = $"Service1.API.Controllers.{moduleName}";
             var assemblyName = new AssemblyName(newTypeName);
