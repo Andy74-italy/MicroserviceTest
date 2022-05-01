@@ -12,6 +12,7 @@ using Service1.API.Repositories;
 using Services.Contracts.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -39,19 +40,22 @@ namespace Service1.API
             });
 
             services.AddScoped<IDBContext, DBContext>();
-            var assembly = Assembly.LoadFrom(".\\bin\\Entities\\Service1.Data.Entity.Products.dll");
-            foreach (Type type in assembly.GetExportedTypes())
+            foreach (string file in Directory.EnumerateFiles(".\\bin\\Entities\\", "*.dll"))
             {
-                if (type.IsAssignableTo(typeof(IEntity)))
+                var assembly = Assembly.LoadFrom(file);
+                foreach (Type type in assembly.GetExportedTypes())
                 {
-                    services.AddScoped(typeof(IEntity), type);
+                    if (type.IsAssignableTo(typeof(IEntity)))
+                    {
+                        services.AddScoped(typeof(IEntity), type);
 
-                    var inttype = typeof(IEntityRepository<>).MakeGenericType(type);
-                    var enttype = typeof(EntityRepository<>).MakeGenericType(type);
-                    services.AddScoped(inttype, enttype);
-                    var servicecontroltype = typeof(Service1Controller<>).MakeGenericType(type);
-                    var registerclass = TestClassCreation(servicecontroltype, inttype, services);
-                    services.AddScoped(servicecontroltype, registerclass);
+                        var inttype = typeof(IEntityRepository<>).MakeGenericType(type);
+                        var enttype = typeof(EntityRepository<>).MakeGenericType(type);
+                        services.AddScoped(inttype, enttype);
+                        var servicecontroltype = typeof(Service1Controller<>).MakeGenericType(type);
+                        var registerclass = TestClassCreation(servicecontroltype, inttype, services);
+                        services.AddScoped(servicecontroltype, registerclass);
+                    }
                 }
             }
         }
