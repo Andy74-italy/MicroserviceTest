@@ -3,7 +3,7 @@ using Services.Contracts.Data;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Service1.Controllers
+namespace Services.Contracts.Controllers
 {
     public interface IGenericController<T> where T : IEntity
     {

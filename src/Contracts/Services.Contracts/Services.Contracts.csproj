@@ -417,7 +417,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controller\IGenericController.cs" />
+    <Compile Include="Controllers\GenericController.cs" />
+    <Compile Include="Controllers\IGenericController.cs" />
     <Compile Include="Data\IEntity.cs" />
     <Compile Include="Data\IEntityRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
