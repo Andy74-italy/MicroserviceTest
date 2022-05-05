@@ -1,4 +1,4 @@
-## The Original Solution
+## The Entity Injection Solution
 
 ## Overview
 
