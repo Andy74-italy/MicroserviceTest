@@ -11,4 +11,4 @@ There are two further branches that evolve the original project, optimizing the 
 
 In both cases, a plug-in methodology is adopted, ie the ability to load components by providing libraries to the system core, thus enriching its functionality.
 
-For details, refer to the specific readme files for each branch.
+For details, refer to the specific readme files for each branch contained in the src folder of this project.
