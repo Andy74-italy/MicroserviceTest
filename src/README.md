@@ -1,4 +1,4 @@
-## The Original Solution
+## The Controller Injection Solution
 
 ## Overview
 
