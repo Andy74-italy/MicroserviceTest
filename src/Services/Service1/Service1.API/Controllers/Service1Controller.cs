@@ -13,10 +13,10 @@ namespace Service1.API.Controllers
     [Route("api/v1/[controller]")]
     public class Service1Controller<T> : ControllerBase where T : IEntity
     {
-        private readonly EntityRepository<T> _repository;
+        private readonly IEntityRepository<T> _repository;
         private readonly ILogger<Service1Controller<T>> _logger;
 
-        public Service1Controller(EntityRepository<T> repository, ILogger<Service1Controller<T>> logger)
+        public Service1Controller(IEntityRepository<T> repository, ILogger<Service1Controller<T>> logger)
         {
             _repository = repository ?? throw new ArgumentNullException(nameof(repository));
             _logger = logger ?? throw new ArgumentNullException(nameof(logger));
