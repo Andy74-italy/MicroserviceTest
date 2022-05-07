@@ -62,5 +62,6 @@ Obviously all the *classes* and *interfaces* will have to be registered in the s
 ## Considerations
 
 Although the architectural design of the application is impeccable from a *best-practice* point of view (with the exception perhaps of the subdivision of projects, but remember that this example is purely for educational purposes), the implementation of a number of *classes* and *interfaces* of this level inevitably leads to an exponential growth of the **redundant code**. In fact, all the *classes* would be nothing more than the reproduction of the already existing code, where it would actually be enough to instruct the *class* to perform the same operations on a different *entity*. However, there would remain the problem of the **injection** of distinct *classes* into the various instances.
+There is also the point that with each implementation, the MVC portal must, in any case, be republished for each new CRUD introduced.
 
 These two aspects are addressed in the projects versioned in the two branches of this repository.
