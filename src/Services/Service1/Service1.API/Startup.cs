@@ -49,16 +49,16 @@ namespace Service1.API
                         var enttype = typeof(EntityRepository<>).MakeGenericType(type);
                         services.AddScoped(inttype, enttype);
                         var servicecontroltype = typeof(Service1Controller<>).MakeGenericType(type);
-                        var registerclass = TestClassCreation(servicecontroltype, inttype, services);
-                        services.AddScoped(servicecontroltype, registerclass);
+                        var registerclass = ClassCreation(servicecontroltype, inttype, services, type.Name);
+                        // services.AddScoped(servicecontroltype, registerclass);
                     }
                 }
             }
         }
 
-        private Type TestClassCreation(Type t, Type arg1, IServiceCollection services)
+        private Type ClassCreation(Type t, Type arg1, IServiceCollection services, string name)
         {
-            var moduleName = "ServiceProduct";
+            var moduleName = $"Service{name}";
             var newTypeName = $"Service1.API.Controllers.{moduleName}";
             var assemblyName = new AssemblyName(newTypeName);
             var dynamicAssembly = AssemblyBuilder.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);

@@ -6,8 +6,8 @@ namespace Service1.Data.Entity
 {
     public class Product : IEntity
     {
-        [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
+        //[BsonId]
+        //[BsonRepresentation(BsonType.ObjectId)]
         public object Id { get; set; }
 
         [BsonElement("Name")]
