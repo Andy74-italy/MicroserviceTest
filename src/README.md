@@ -38,7 +38,7 @@ The implementation of the **pattern repository** becomes slightly more complex, 
 
 Also the *class* that identifies the repository is, in turn, **typed** through the **generics**, as it is not aware of the entities. Also in this case the constraint on the characteristics of the generic are expressed as in its interface (have to extend the **IEntity** *interface*). The implementation is simple and reports the same operations as the original project, retrieving the correct collection through the method introduced in the context database implemented above.
 
-### Service1Controller&lt;T&gt;
+### Service1Controller&lt;T&gt; (class)
 
 As much as the *controller* might seem the core of the whole process, its implementation respects the canons already addressed for the other components of this project (the *repository*, the database *context* and the *entity*). It is therefore easy to understand, also implementing this through a **generic**. The *class*, obviously, inside the **MVC** is not identified as a *controller* and therefore not exposed (or in any case not in the specific implementation of the *entity*). The *class*, however, uses the **IEntityRepository** *interface* which will be implemented in the specific type used to extend the *class*. The actions of the controller respect the **CRUD** methods of the standard management, invoking the relative methods of the specific *repository*.
 
